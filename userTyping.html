@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    #test-text {
+      margin: 20px auto;
+      max-width: 600px;
+      font-size: 1.2rem;
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #input {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Typing Test</h1>
+  <div id="test-text">The quick brown fox jumps over the lazy dog.</div>
+  <textarea id="input" rows="4" placeholder="Start typing here..."></textarea>
+
+  <div id="results">
+    <p>WPM: <span id="wpm">0</span></p>
+    <p>Accuracy: <span id="accuracy">0%</span></p>
+  </div>
+
+  <script>
+    const testText = "The quick brown fox jumps over the lazy dog.";
+    const inputField = document.getElementById('input');
+    const wpmSpan = document.getElementById('wpm');
+    const accuracySpan = document.getElementById('accuracy');
+
+    let startTime;
+
+    inputField.addEventListener('focus', () => {
+      if (!startTime) startTime = new Date();
+    });
+
+    inputField.addEventListener('input', () => {
+      const currentText = inputField.value;
+      const elapsedTime = (new Date() - startTime) / 60000; // in minutes
+      const wordsTyped = currentText.trim().split(/\s+/).length;
+      const wpm = Math.round(wordsTyped / elapsedTime);
+      wpmSpan.textContent = isNaN(wpm) ? 0 : wpm;
+
+      // Accuracy
+      let correct = 0;
+      for (let i = 0; i < currentText.length; i++) {
+        if (currentText[i] === testText[i]) correct++;
+      }
+      const accuracy = Math.round((correct / testText.length) * 100);
+      accuracySpan.textContent = isNaN(accuracy) ? '0%' : `${accuracy}%`;
+    });
+  </script>
+</body>
+</html>
